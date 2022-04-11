@@ -17,7 +17,6 @@
             <Button x:Name="Delete_Button" Command="{Binding AddTestDataCommand}" Content="Добавить тестовые данные" Margin="5, 5, 10, 5"/>
         </StackPanel>
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="0">
-            <Button x:Name="CreateRequest_Button" Command="{Binding AddCommand}" Content="Добавить платеж" Margin="5"/>
             <Button x:Name="Change_Button" Command="{Binding PayCommand}" Content="Оплатить заказ" Margin="5"/>
         </StackPanel>
         <Grid Grid.Row="1">
@@ -35,13 +34,13 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <ListView Grid.Column="1" Margin="2">
+            <ListView Grid.Column="1" Margin="2" ItemsSource="{Binding MoneyInflow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Номер" Width="auto"></GridViewColumn>
-                        <GridViewColumn Header="Дата" Width="auto"></GridViewColumn>
-                        <GridViewColumn Header="Сумма" Width="auto"></GridViewColumn>
-                        <GridViewColumn Header="Остаток" Width="auto"></GridViewColumn>
+                        <GridViewColumn Header="Номер" Width="auto" DisplayMemberBinding="{Binding Path=Id}"></GridViewColumn>
+                        <GridViewColumn Header="Дата" Width="auto" DisplayMemberBinding="{Binding Path=Date}"></GridViewColumn>
+                        <GridViewColumn Header="Сумма" Width="auto" DisplayMemberBinding="{Binding Path=MoneyAmount}"></GridViewColumn>
+                        <GridViewColumn Header="Остаток" Width="auto" DisplayMemberBinding="{Binding Path=RestMoney}"></GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

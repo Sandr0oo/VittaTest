@@ -12,7 +12,8 @@ namespace VittaTest
     {
         private DbRequests _db;
 
-        private DelegateCommand _changeCommand;
+        private DelegateCommand _addTestDataCommand;
+        private DelegateCommand _payCommand;
 
         public Task Init { get; private set; }
 
@@ -50,7 +51,12 @@ namespace VittaTest
             MoneyInflow = new ObservableCollection<MoneyInflow>(await _db.GetAllMoneyInflows());
         }
 
-        public DelegateCommand ChangeCommand => _changeCommand ?? new DelegateCommand(obj =>
+        public DelegateCommand AddTestDataCommand => _addTestDataCommand ?? new DelegateCommand(async (obj) =>
+        {
+
+        });
+
+        public DelegateCommand PayCommand => _payCommand ?? new DelegateCommand(async (obj) =>
         {
 
         });
