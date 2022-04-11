@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows;
 using VittaTest.Context;
+using VittaTest.Services;
 
 namespace VittaTest
 {
@@ -12,7 +13,6 @@ namespace VittaTest
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
         }
     }
 }

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace VittaTest.Models
 {
-    public partial class MoneyFlow
+    public partial class MoneyInflow
     {
-        public MoneyFlow()
+        public MoneyInflow()
         {
             Payments = new HashSet<Payment>();
         }

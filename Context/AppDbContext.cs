@@ -18,7 +18,7 @@ namespace VittaTest.Context
         {
         }
 
-        public virtual DbSet<MoneyFlow> MoneyFlows { get; set; }
+        public virtual DbSet<MoneyInflow> MoneyInflows { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
 
@@ -26,7 +26,6 @@ namespace VittaTest.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=Vitta;Trusted_Connection=True;");
             }
         }
@@ -35,8 +34,10 @@ namespace VittaTest.Context
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS");
 
-            modelBuilder.Entity<MoneyFlow>(entity =>
+            modelBuilder.Entity<MoneyInflow>(entity =>
             {
+                entity.ToTable("MoneyInflow");
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Date)
@@ -73,7 +74,7 @@ namespace VittaTest.Context
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.MoneyflowsId).HasColumnName("moneyflows_id");
+                entity.Property(e => e.MoneyInflowId).HasColumnName("money_inflow_id");
 
                 entity.Property(e => e.OrderId).HasColumnName("order_id");
 
@@ -81,10 +82,10 @@ namespace VittaTest.Context
                     .HasColumnType("decimal(18, 0)")
                     .HasColumnName("payment_amount");
 
-                entity.HasOne(d => d.Moneyflows)
+                entity.HasOne(d => d.MoneyInflow)
                     .WithMany(p => p.Payments)
-                    .HasForeignKey(d => d.MoneyflowsId)
-                    .HasConstraintName("FK__Payments__moneyf__29572725");
+                    .HasForeignKey(d => d.MoneyInflowId)
+                    .HasConstraintName("FK__Payments__money___29572725");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.Payments)

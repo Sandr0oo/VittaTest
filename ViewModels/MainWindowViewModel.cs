@@ -1,13 +1,59 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using VittaTest.Models;
+using VittaTest.Services;
 
 namespace VittaTest
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        public MainWindowViewModel() 
+        private DbRequests _db;
+
+        private DelegateCommand _changeCommand;
+
+        public Task Init { get; private set; }
+
+        private ObservableCollection<Order> _orders;
+        public ObservableCollection<Order> Orders
         {
+            get { return _orders; }
+            set
+            {
+                _orders = value;
+                OnPropertyChanged("Orders");
+            }
         }
+        private ObservableCollection<MoneyInflow> _moneyInflow;
+        public ObservableCollection<MoneyInflow> MoneyInflow
+        {
+            get { return _moneyInflow; }
+            set
+            {
+                _moneyInflow = value;
+                OnPropertyChanged("MoneyInflow");
+            }
+        }
+
+        public MainWindowViewModel(DbRequests db)
+        {
+            _db = db;
+
+            Init = InitializeAsync();
+        }
+
+        private async Task InitializeAsync()
+        {
+            Orders = new ObservableCollection<Order>(await _db.GetAllOrders());
+            MoneyInflow = new ObservableCollection<MoneyInflow>(await _db.GetAllMoneyInflows());
+        }
+
+        public DelegateCommand ChangeCommand => _changeCommand ?? new DelegateCommand(obj =>
+        {
+
+        });
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
