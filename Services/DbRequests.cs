@@ -53,5 +53,18 @@ namespace VittaTest.Services
         {
             return await _dbContext.Payments.Select(p => p).ToListAsync();
         }
+
+        public async Task<int> AddPay(Order selectedOrder, MoneyInflow selectedMoneyInflow, decimal payAmount)
+        {
+            Payment pay = new Payment()
+            {
+                PaymentAmount = payAmount,
+                MoneyInflow = selectedMoneyInflow,
+                Order = selectedOrder
+            };
+            await _dbContext.Payments.AddAsync(pay);
+            var aaa = await _dbContext.SaveChangesAsync();
+            return aaa;
+        }
     }
 }

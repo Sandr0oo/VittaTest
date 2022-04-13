@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using VittaTest.Models;
 using VittaTest.Services;
 
@@ -149,14 +151,30 @@ namespace VittaTest
 
         public DelegateCommand PayCommand => _payCommand ?? new DelegateCommand(async (obj) =>
         {
-            if(SelectedOrder != null && SelectedMoneyInflow != null)
+            if (SelectedOrder != null && SelectedMoneyInflow != null)
             {
-                if(SelectedMoneyInflow.RestMoney == 0)
+                try
                 {
-                    MessageBox.Show("Недостаточно денег для оплаты заказа");
+                    var numberOfAdded = await _db.AddPay(SelectedOrder, SelectedMoneyInflow, _selectedMoneyInflow.RestMoney);
+
+                    int selectedOrderId = SelectedOrder.Id;
+                    int selectedMoneyInflow = SelectedMoneyInflow.Id;
+
+                    Orders.Remove(SelectedOrder);
+                    Orders.Add((await _db.LoadAllOrders()).Select(o => o).Where(o => o.Id == selectedOrderId).FirstOrDefault());
+
+                    MoneyInflow.Remove(SelectedMoneyInflow);
+                    MoneyInflow.Add((await _db.LoadAllMoneyInflows()).Select(m => m).Where(m => m.Id == selectedMoneyInflow).FirstOrDefault());
+
+                    //Orders.Add(new Order());
+
+                    //Orders = new ObservableCollection<Order>(await _db.GetAllOrders());
+                    //MoneyInflow = new ObservableCollection<MoneyInflow>(await _db.GetAllMoneyInflows());
                 }
-
-
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.InnerException.Message, "Ошбика", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             else
             {
