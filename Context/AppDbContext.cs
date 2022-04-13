@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.DependencyInjection;
 using VittaTest.Models;
 
 #nullable disable
@@ -13,6 +14,7 @@ namespace VittaTest.Context
         {
         }
 
+        [ActivatorUtilitiesConstructor]
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {

@@ -160,16 +160,16 @@ namespace VittaTest
                     int selectedOrderId = SelectedOrder.Id;
                     int selectedMoneyInflow = SelectedMoneyInflow.Id;
 
-                    Orders.Remove(SelectedOrder);
-                    Orders.Add((await _db.LoadAllOrders()).Select(o => o).Where(o => o.Id == selectedOrderId).FirstOrDefault());
+                    //Orders.Remove(SelectedOrder);
+                    //Orders.Add((await _db.LoadAllOrders()).Select(o => o).Where(o => o.Id == selectedOrderId).FirstOrDefault());
 
-                    MoneyInflow.Remove(SelectedMoneyInflow);
-                    MoneyInflow.Add((await _db.LoadAllMoneyInflows()).Select(m => m).Where(m => m.Id == selectedMoneyInflow).FirstOrDefault());
+                    //MoneyInflow.Remove(SelectedMoneyInflow);
+                    //MoneyInflow.Add((await _db.LoadAllMoneyInflows()).Select(m => m).Where(m => m.Id == selectedMoneyInflow).FirstOrDefault());
 
                     //Orders.Add(new Order());
 
-                    //Orders = new ObservableCollection<Order>(await _db.GetAllOrders());
-                    //MoneyInflow = new ObservableCollection<MoneyInflow>(await _db.GetAllMoneyInflows());
+                    Orders = new ObservableCollection<Order>(await _db.GetAllOrders());
+                    MoneyInflow = new ObservableCollection<MoneyInflow>(await _db.GetAllMoneyInflows());
                 }
                 catch(Exception ex)
                 {

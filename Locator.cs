@@ -16,7 +16,7 @@ namespace VittaTest
         {
             var services = new ServiceCollection();
 
-            services.AddDbContext<AppDbContext>();
+            services.AddDbContextFactory<AppDbContext>();
             services.AddScoped<DbRequests>();
 
             services.AddScoped<MainWindowViewModel>();

@@ -10,48 +10,70 @@ namespace VittaTest.Services
 {
     public class DbRequests : IDbRequests
     {
-        private readonly AppDbContext _dbContext;
+        private IDbContextFactory<AppDbContext> _dbContextFactory;
 
-        public DbRequests(AppDbContext dbContext)
+        public DbRequests(IDbContextFactory<AppDbContext> dbContext)
         {
-            _dbContext = dbContext;
+            _dbContextFactory = dbContext;
         }
 
         public async Task<int> AddDataRange<T>(List<T> data) where T : class
         {
-            DbSet<T> entity = _dbContext.Set<T>();
-            await entity.AddRangeAsync(data);
-            return await _dbContext.SaveChangesAsync();
+            using(var _dbContext = _dbContextFactory.CreateDbContext())
+            {
+                DbSet<T> entity = _dbContext.Set<T>();
+                await entity.AddRangeAsync(data);
+                return await _dbContext.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<MoneyInflow>> GetAllMoneyInflows()
         {
-            return await _dbContext.MoneyInflows.ToListAsync();
+            using (var _dbContext = _dbContextFactory.CreateDbContext())
+            {
+                return await _dbContext.MoneyInflows.ToListAsync();
+            }
         }
 
         public async Task<IEnumerable<Order>> GetAllOrders()
         {
-            return await _dbContext.Orders.ToListAsync();
+            using (var _dbContext = _dbContextFactory.CreateDbContext())
+            {
+                return await _dbContext.Orders.ToListAsync();
+            }
         }
 
         public async Task<IEnumerable<Payment>> GetAllPayments()
         {
-            return await _dbContext.Payments.ToListAsync();
+            using (var _dbContext = _dbContextFactory.CreateDbContext())
+            {
+                return await _dbContext.Payments.ToListAsync();
+            }
         }
 
         public async Task<IEnumerable<MoneyInflow>> LoadAllMoneyInflows()
         {
-            return await _dbContext.MoneyInflows.Select(m => m).ToListAsync();
+            using (var _dbContext = _dbContextFactory.CreateDbContext())
+            {
+                return await _dbContext.MoneyInflows.Select(m => m).ToListAsync();
+            }
         }
 
         public async Task<IEnumerable<Order>> LoadAllOrders()
         {
-            return await _dbContext.Orders.Select(o => o).ToListAsync();
+            using (var _dbContext = _dbContextFactory.CreateDbContext())
+            {
+                //await _dbContext.Orders.LoadAsync();
+                return await _dbContext.Orders.Select(o => o).ToListAsync();
+            }
         }
 
         public async Task<IEnumerable<Payment>> LoadAllPayments()
         {
-            return await _dbContext.Payments.Select(p => p).ToListAsync();
+            using (var _dbContext = _dbContextFactory.CreateDbContext())
+            {
+                return await _dbContext.Payments.Select(p => p).ToListAsync();
+            }
         }
 
         public async Task<int> AddPay(Order selectedOrder, MoneyInflow selectedMoneyInflow, decimal payAmount)
@@ -59,12 +81,14 @@ namespace VittaTest.Services
             Payment pay = new Payment()
             {
                 PaymentAmount = payAmount,
-                MoneyInflow = selectedMoneyInflow,
-                Order = selectedOrder
+                MoneyInflowId = selectedMoneyInflow.Id,
+                OrderId = selectedOrder.Id
             };
-            await _dbContext.Payments.AddAsync(pay);
-            var aaa = await _dbContext.SaveChangesAsync();
-            return aaa;
+            using (var _dbContext = _dbContextFactory.CreateDbContext())
+            {
+                await _dbContext.Payments.AddAsync(pay);
+                return await _dbContext.SaveChangesAsync(); ;
+            }
         }
     }
 }
